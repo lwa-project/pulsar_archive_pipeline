@@ -1,0 +1,26 @@
+PSRJ            J0946+0952     
+RAJ      09:46:08.63701970  1          0.04332232
+DECJ      09:52:33.7654861  1           1.7179820
+POSEPOCH        48988.5562
+F0      0.9109895360067181  1  0.0000000000452410
+F1     -2.921631918106E-15  1  2.597620382574E-19
+F2     -1.375665748333E-25
+PEPOCH        54226.239499
+START            55569.110
+FINISH           56942.376
+DM               15.334499
+SOLARN0              10.00
+EPHEM               DE200
+CLK                 UNCORR      
+UNITS               TDB
+TIMEEPH             FB90
+T2CMETHOD           TEMPO
+CORRECT_TROPOSPHERE N
+PLANET_SHAPIRO      N
+DILATEFREQ          N
+NTOA                    65
+TRES               6737.58
+TZRMJD  55569.11124995965520
+TZRFRQ            1520.000
+TZRSITE                  8
+NITS                     1
