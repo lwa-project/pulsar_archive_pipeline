@@ -1,0 +1,6 @@
+#!/usr/bin/env psrsh
+
+zap median window=13
+zap median cutoff=6
+zap median
+unload ext=zz
