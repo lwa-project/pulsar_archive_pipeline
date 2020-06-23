@@ -195,10 +195,10 @@ for drxfile,beam,drxfreq in zip(drxfiles,drxbeams,drxfreqs):
     else:
         arfilename = "%d_%s_%sMHz%s" % (mjd,psrname,drxfreq[0],scannum)
     arrules = arrules + "%s.ar: %s_b%dt1.dat %s_%s.hdr\n" % (arfilename,os.path.basename(drxfile),beam,psrname,drxfreq[0])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 1 %s_%spsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_%sMHz.out ; fi ; fi ; fi\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 1 %s_%spsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_%sMHz.out ; fi ; fi ; fi\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[0],drxfreq[0])
     if dosinglepulse != "1":
         arrules = arrules + "\ttest -e $@ && rm $<\n\n"
     else:
@@ -211,10 +211,10 @@ for drxfile,beam,drxfreq in zip(drxfiles,drxbeams,drxfreqs):
         arfilename = "%d_%s_%sMHz%s" % (mjd,psrname,drxfreq[1],scannum)
         prevarfilename = "%d_%s_%sMHz%s" % (mjd,psrname,drxfreq[0],scannum)
     arrules = arrules + "%s.ar: %s_b%dt2.dat %s_%s.hdr %s.ar\n" % (arfilename,os.path.basename(drxfile),beam,psrname,drxfreq[1],prevarfilename)
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
-    arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_%sMHz.out ; fi ; fi ; fi \n" % (dspsrchans,dspsrbins,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
+    arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -L%s -A -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_%sMHz.out ; fi ; fi ; fi \n" % (dspsrchans,dspsrbins,TZPAR_PATH,psrname,dspsrT,arfilename,psrname,drxfreq[1],drxfreq[1])
     if dosinglepulse != "1":
         arrules = arrules + "\ttest -e $@ && rm $<\n\n"
     else:
@@ -232,11 +232,11 @@ for drxfile,beam,drxfreq in zip(drxfiles,drxbeams,drxfreqs):
         else:
             spdspsrchans = dspsrchans
         arrules = arrules + "%s.ar: %s_b%dt1.dat %s_%s.hdr %s.ar\n" % (arfilename,os.path.basename(drxfile),beam,psrname,drxfreq[0],prevarfilename)
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; fi ; fi ; fi \n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
-        arrules = arrules + "\tpsrsh /home/kstovall/src/LWAtools/median_6.psh %s_*.ar\n" % (arfilename)
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; fi ; fi ; fi \n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[0],drxfreq[0])
+        arrules = arrules + "\tpsrsh %s/median_6.psh %s_*.ar\n" % (SCRIPT_PATH, arfilename)
         arrules = arrules + "\tpam -e 64fchan --setnchn=64 %s_*.zz\n" % (arfilename)
         arrules = arrules + "\tpsradd -o %s.ar %s_*.64fchan\n" % (arfilename,arfilename)
         arrules = arrules + "\trm %s_*.ar %s_*.zz %s_*.64fchan\n" % (arfilename,arfilename,arfilename)
@@ -248,23 +248,23 @@ for drxfile,beam,drxfreq in zip(drxfiles,drxbeams,drxfreqs):
             arfilename = "%d_%s_%sMHz%s_SP" % (mjd,psrname,drxfreq[1],scannum)
             prevarfilename = "%d_%s_%sMHz%s" % (mjd,psrname,drxfreq[1],scannum)
         arrules = arrules + "%s.ar: %s_b%dt2.dat %s_%s.hdr %s.ar\n" % (arfilename,os.path.basename(drxfile),beam,psrname,drxfreq[1],prevarfilename)
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
-        arrules = arrules + "\tdspsr -F%s:D -b%s -E /home/kstovall/tzpar/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; fi ; fi ; fi \n" % (spdspsrchans,"1024",psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 2 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -cuda 0 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; if [ $$? -ne 0 ] ; then \\\n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
+        arrules = arrules + "\tdspsr -F%s:D -b%s -E %s/%s.par -turns 1 -nsub 100 -O %s -a PSRFITS -minram=256 -t1 %s_%s.hdr > dspsr_singlepulse_%sMHz.out ; fi ; fi ; fi \n" % (spdspsrchans,"1024",TZPAR_PATH,psrname,arfilename,psrname,drxfreq[1],drxfreq[1])
 
-        arrules = arrules + "\tpsrsh /home/kstovall/src/LWAtools/median_6.psh %s_*.ar\n" % (arfilename)
+        arrules = arrules + "\tpsrsh %s/median_6.psh %s_*.ar\n" % (SCRIPT_PATH, arfilename)
         arrules = arrules + "\tpam -e 64fchan --setnchn=64 %s_*.zz\n" % (arfilename)
         arrules = arrules + "\tpsradd -o %s.ar %s_*.64fchan\n" % (arfilename,arfilename)
         arrules = arrules + "\trm %s_*.ar %s_*.zz %s_*.64fchan\n" % (arfilename,arfilename,arfilename)
         arrules = arrules + "\ttest -e $@ && rm $<\n\n"
 
 #    if scannum == "" or scannum == "_0001":
-    arrules = arrules + "%s_%s.hdr: /home/kstovall/tzpar/hdr/%s.hdr\n" % (psrname,drxfreq[0],psrname)
+    arrules = arrules + "%s_%s.hdr: %s/hdr/%s.hdr\n" % (psrname,drxfreq[0],TZPAR_PATH,psrname)
     arrules = arrules + "\tcp $^ %s_%s.hdr\n" % (psrname,drxfreq[0])
     arrules = arrules + "\techo \"FREQ %s\" >> %s_%s.hdr\n" % (drxfreq[0],psrname,drxfreq[0])
     arrules = arrules + "\techo \"DATAFILE %s_b%st1.dat\" >> %s_%s.hdr\n\n" % (os.path.basename(drxfile),beam,psrname,drxfreq[0])
-    arrules = arrules + "%s_%s.hdr: /home/kstovall/tzpar/hdr/%s.hdr\n" % (psrname,drxfreq[1],psrname)
+    arrules = arrules + "%s_%s.hdr: %s/hdr/%s.hdr\n" % (psrname,drxfreq[1],TZPAR_PATH,psrname)
     arrules = arrules + "\tcp $^ %s_%s.hdr\n" % (psrname,drxfreq[1])
     arrules = arrules + "\techo \"FREQ %s\" >> %s_%s.hdr\n" % (drxfreq[1],psrname,drxfreq[1])
     arrules = arrules + "\techo \"DATAFILE %s_b%st2.dat\" >> %s_%s.hdr\n\n" % (os.path.basename(drxfile),beam,psrname,drxfreq[1])
@@ -389,44 +389,44 @@ rfirules = rfirules + "%_rfifind.weights: %_rfifind.mask\n"
 rfirules = rfirules + "\t-python2.7 /home/pulsar/bin/rfifind.py $^\n\n"
 
 pfdrules = pfdrules + "%%_timing_masked_PSR_%s.pfd: %%_0001.fits %%_rfifind.mask %%.ignorechan\n" % (parpsrname)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*2,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*4,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*8,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*16,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*32,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*13,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (psrname,ntbin,nprepsub*26,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*2,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*4,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*8,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*16,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*32,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*13,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*26,dm)
 
 pfdrules = pfdrules + "%%_search_masked_PSR_%s.pfd: %%_0001.fits %%_rfifind.mask %%.ignorechan\n" % (parpsrname)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*2,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*4,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*8,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*16,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*32,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*13,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (psrname,nsbin,nprepsub*26,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*2,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*4,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*8,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*16,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*32,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*13,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %s -noxwin -o $*_search_masked -dm %s $< > $*_search_masked.out ; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*26,dm)
 
 pfdrules = pfdrules + "%%_timing_unmasked_PSR_%s.pfd: %%_0001.fits %%.ignorechan\n" % (parpsrname)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*2,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*4,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*8,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*16,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*32,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,ntbin,nprepsub*13,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (psrname,ntbin,nprepsub*26,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*2,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*4,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*8,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*16,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*32,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*13,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_unmasked -dm %s $< > $*_timing_unmasked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (TZPAR_PATH,psrname,ntbin,nprepsub*26,dm)
 
 pfdrules = pfdrules + "%%_search_unmasked_PSR_%s.pfd: %%_0001.fits %%.ignorechan\n" % (parpsrname)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*2,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*4,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*8,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*16,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*32,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (psrname,nsbin,nprepsub*13,dm)
-pfdrules = pfdrules + "\tprepfold -ncpus 2 -par /home/kstovall/tzpar/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (psrname,nsbin,nprepsub*26,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*2,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*4,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*8,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out;    if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*16,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*32,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*13,dm)
+pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*26,dm)
 
 subrules = subrules + "%_subs_0001.fits: %_0001.fits %_rfifind.weights\n"
 subrules = subrules + "\tpsrfits_subband -weights $*_rfifind.weights -o $*_subs -nsub %s -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] ; then \\\n" % (nprepsub,dm,dstime)
@@ -447,7 +447,7 @@ if searchsinglepulse == "1":
     enddm=float(dm)+0.50
     dmstep=0.1
     sprules = sprules + "%_singlepulse.ps: %_singlepulse\n"
-    sprules = sprules + "\t/home/kstovall/src/presto_lofreq/bin/single_pulse_search.py -t 5.5 $*_singlepulse/*.singlepulse\n"
+    sprules = sprules + "\t%s/single_pulse_search.py -t 5.5 $*_singlepulse/*.singlepulse\n" % SCRIPT_PATH
     sprules = sprules + "\t mv $*_singlepulse/$@ .\n\n"
     sprules = sprules + "%_singlepulse.tgz: %_singlepulse %_singlepulse.ps\n"
     sprules = sprules + "\ttar -czf $@ $<\n"
@@ -464,17 +464,17 @@ if searchsinglepulse == "1":
     for trialdm in np.arange(startdm,enddm,dmstep):
         sprules = sprules + "%%_DM%0.3f_singlepulse: %%_0001.fits %%_rfifind.mask %%.ignorechan\n" % (trialdm)
         sprules = sprules + "\tmkdir $*_DM%0.3f_singlepulse\n" % (trialdm)
-        sprules = sprules + "\tpython /home/kstovall/src/LWAtools/getmaskpercentage.py $*_rfifind.mask ; if [ $$? -ne 0 ] ; then \\\n"
+        sprules = sprules + "\tpython %s/getmaskpercentage.py $*_rfifind.mask ; if [ $$? -ne 0 ] ; then \\\n" % SCRIPT_PATH
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits ; else \\\n" % (trialdm,trialdm)
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits -mask $*_rfifind.mask ; fi\n" % (trialdm,trialdm)
-        sprules = sprules + "\t/home/kstovall/src/presto_lofreq/bin/single_pulse_search.py -m 1 -b -p -g $*_DM%0.3f_singlepulse/*.dat\n" % trialdm
+        sprules = sprules + "\t%s/single_pulse_search.py -m 1 -b -p -g $*_DM%0.3f_singlepulse/*.dat\n" % (SCRIPT_PATH, trialdm)
         sprules = sprules + "\trm $*_DM%0.3f_singlepulse/*.dat\n\n" % trialdm
 if searchscatteredpulse == "1":
     startdm=float(dm)-5.00
     enddm=float(dm)+5.00
     dmstep=1.0
     sprules = sprules + "%_scatteredsearch.ps: %_scattersearch\n"
-    sprules = sprules + "\tpython /home/kstovall/bin/plotcrab.py $*_scattersearch/*.scatteredsearch\n"
+    sprules = sprules + "\tpython %s/plotcrab.py $*_scattersearch/*.scatteredsearch\n" % SCRIPT_PATH
     sprules = sprules + "\t mv $*_scattersearch/$@ .\n\n"
     sprules = sprules + "%_scattersearch.tgz: %_scattersearch %_scatteredsearch.ps\n"
     sprules = sprules + "\ttar -czf $@ $<\n"
@@ -493,7 +493,7 @@ if searchscatteredpulse == "1":
         sprules = sprules + "\tmkdir $*_DM%0.2f_scattersearch\n" % (trialdm)
         sprules = sprules + "\tprepsubband -lodm %0.2f -numdms 100 -dmstep 0.01 -nsub 512 -ignorechan $*.ignorechan -o $*_DM%0.2f_scattersearch/$* $*_0001.fits -mask $*_rfifind.mask\n" % (trialdm,trialdm)
         sprules = sprules + "\tfor file in `ls $*_DM%0.2f_scattersearch/*.dat` ; \\\n" % trialdm
-        sprules = sprules + "\t\tdo python /home/kstovall/bin/crabsearch.py $$file ; done\n" % trialdm
+        sprules = sprules + "\t\tdo python %s/crabsearch.py $$file ; done\n" % SCRIPT_PATH
         sprules = sprules + "\trm $*_DM%0.2f_scattersearch/*.dat\n\n" % trialdm
 
 
