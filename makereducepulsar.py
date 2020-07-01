@@ -474,7 +474,7 @@ if searchscatteredpulse == "1":
     enddm=float(dm)+5.00
     dmstep=1.0
     sprules = sprules + "%_scatteredsearch.ps: %_scattersearch\n"
-    sprules = sprules + "\tpython %s/plotcrab.py $*_scattersearch/*.scatteredsearch\n" % SCRIPT_PATH
+    sprules = sprules + "\tpython %s/crab_plot.py $*_scattersearch/*.scatteredsearch\n" % SCRIPT_PATH
     sprules = sprules + "\t mv $*_scattersearch/$@ .\n\n"
     sprules = sprules + "%_scattersearch.tgz: %_scattersearch %_scatteredsearch.ps\n"
     sprules = sprules + "\ttar -czf $@ $<\n"
@@ -493,7 +493,7 @@ if searchscatteredpulse == "1":
         sprules = sprules + "\tmkdir $*_DM%0.2f_scattersearch\n" % (trialdm)
         sprules = sprules + "\tprepsubband -lodm %0.2f -numdms 100 -dmstep 0.01 -nsub 512 -ignorechan $*.ignorechan -o $*_DM%0.2f_scattersearch/$* $*_0001.fits -mask $*_rfifind.mask\n" % (trialdm,trialdm)
         sprules = sprules + "\tfor file in `ls $*_DM%0.2f_scattersearch/*.dat` ; \\\n" % trialdm
-        sprules = sprules + "\t\tdo python %s/crabsearch.py $$file ; done\n" % SCRIPT_PATH
+        sprules = sprules + "\t\tdo python %s/crab_search.py $$file ; done\n" % SCRIPT_PATH
         sprules = sprules + "\trm $*_DM%0.2f_scattersearch/*.dat\n\n" % trialdm
 
 
