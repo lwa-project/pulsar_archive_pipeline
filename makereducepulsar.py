@@ -1,10 +1,7 @@
 #!/usr/bin/python
 
 import subprocess,sys,socket,os
-from lsl.reader import drx
-import ephem
-from lsl import astro
-from lsl.common.dp import fS
+from lsl.reader.ldp import DRXFile
 import psr_utils as pu
 import sqlite3
 import numpy as np
@@ -78,52 +75,29 @@ drxbeams = []
 drxfreqs = []
 
 for drxfile in drxfiles:
-    fh = open(drxfile, "rb")
-    timeTags = []
-    for i in range(16):
-        junkFrame = drx.read_frame(fh)
-        timeTags.append(junkFrame.payload.timetag)
-    fh.seek(-16*drx.FRAME_SIZE, 1)
-
-    i = 0
-    while (timeTags[i+0] != timeTags[i+1]) or (timeTags[i+0] != timeTags[i+2]) or (timeTags[i+0] != timeTags[i+3]):
-        i += 1
-        fh.seek(drx.FRAME_SIZE, 1)
-
+    idf = DRXFile(drxfile)
+    
     # Load in basic information about the data
-    junkFrame = drx.read_frame(fh)
-    fh.seek(-drx.FRAME_SIZE, 1)
     ## What's in the data?
-    srate = junkFrame.sample_rate
-    beams = drx.get_beam_count(fh)
-    tunepols = drx.get_frames_per_obs(fh)
-    tunepol = tunepols[0] + tunepols[1] + tunepols[2] + tunepols[3]
-    beampols = tunepol
-
+    beam = idf.get_info('beam')
+    srate = idf.get_info('sample_rate') # samples/s
+    
     ## Date
-    beginTime = junkFrame.time.datetime
-    mjd = junkFrame.time.mjd
+    beginTime = idf.get_info('start_time').datetime
+    mjd = idf.get_info('start_time').mjd
     mjd_day = int(mjd)
     mjd_sec = (mjd-mjd_day)*86400
 
-    ## Tuning frequencies and initial time tags
-    ttStep = int(fS / srate * 4096)
-    ttFlow = [0, 0, 0, 0]
-    for i in range(4):
-        junkFrame = drx.read_frame(fh)
-        beam,tune,pol = junkFrame.id
-        aStand = 2*(tune-1) + pol
-        ttFlow[aStand] = junkFrame.payload.timetag - ttStep
-
-        if tune == 1:
-            centralFreq1 = "%.1f" % (junkFrame.central_freq*1e-6)
-        else:
-            centralFreq2 = "%.1f" % (junkFrame.central_freq*1e-6)
+    ## Tuning frequencies
+    centralFreq1 = idf.get_info('freq1') / 1e6  # MHz
+    centralFreq2 = idf.get_info('freq2') / 1e6  # MHz
+    
+    # Save it
     drxbeams.append(beam)
     drxfreqs.append([centralFreq1,centralFreq2])
     
-fh.close()
-
+    idf.close()
+    
 intermediates = ".INTERMEDIATE:"
 make = "make:\n\tpython " + ' '.join(sys.argv[:]) + " > Make.psr\n\n"
 ars = "ar:"
