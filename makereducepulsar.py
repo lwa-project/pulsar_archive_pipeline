@@ -464,7 +464,7 @@ if searchsinglepulse == "1":
     for trialdm in np.arange(startdm,enddm,dmstep):
         sprules = sprules + "%%_DM%0.3f_singlepulse: %%_0001.fits %%_rfifind.mask %%.ignorechan\n" % (trialdm)
         sprules = sprules + "\tmkdir $*_DM%0.3f_singlepulse\n" % (trialdm)
-        sprules = sprules + "\tpython %s/getmaskpercentage.py $*_rfifind.mask ; if [ $$? -ne 0 ] ; then \\\n" % SCRIPT_PATH
+        sprules = sprules + "\tpython %s/get_mask_percentage.py $*_rfifind.mask ; if [ $$? -ne 0 ] ; then \\\n" % SCRIPT_PATH
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits ; else \\\n" % (trialdm,trialdm)
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits -mask $*_rfifind.mask ; fi\n" % (trialdm,trialdm)
         sprules = sprules + "\t%s/single_pulse_search.py -m 1 -b -p -g $*_DM%0.3f_singlepulse/*.dat\n" % (SCRIPT_PATH, trialdm)
