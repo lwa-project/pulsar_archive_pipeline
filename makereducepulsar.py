@@ -381,7 +381,7 @@ else:
         fitsstamp = fitsstamp + "\tmv $< $@" 
 
 rfirules = rfirules + "%.ignorechan: %_0001.fits\n"
-rfirules = rfirules + "\tpython /home/pulsar/bin/createignorechan.py $< > $*.ignorechan\n\n"
+rfirules = rfirules + "\tpython %s/create_ignore_chan.py $< > $*.ignorechan\n\n" % SCRIPT_PATH
 
 rfirules = rfirules + "%_rfifind.mask: %_0001.fits %.ignorechan\n"
 rfirules = rfirules + "\trfifind -time 30 -o $* $< -ignorechan $*.ignorechan > $*_rfifind.out\n\n"
