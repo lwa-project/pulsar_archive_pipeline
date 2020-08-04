@@ -8,6 +8,8 @@ import shutil
 import sqlite3
 import socket
 
+from common import DATABASE_PATH
+
 checkpsr = sys.argv[1]
 
 def get_size(start_path = '.'):
@@ -90,7 +92,7 @@ if __name__ == "__main__":
     out, err = p.communicate()
     if p.returncode != 0:
       print "Rsync returned an error, marking DB entry as waiting and exiting"
-      conn = sqlite3.connect('/home/pulsar/PulsarProcessing/PulsarProcessing.db')
+      conn = sqlite3.connect(os.path.join(DATABASE_PATH, 'PulsarProcessing.db'))
       c = conn.cursor()
       hostname = socket.gethostname()
       t1 = (pulsarname,hostname,processdirname)

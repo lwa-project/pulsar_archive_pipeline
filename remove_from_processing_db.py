@@ -1,7 +1,9 @@
 import sqlite3
 import os,socket
 
-conn = sqlite3.connect('/home/pulsar/PulsarProcessing/PulsarProcessing.db')
+from common import DATABASE_PATH
+
+conn = sqlite3.connect(os.path.join(DATABASE_PATH, 'PulsarProcessing.db'))
 c = conn.cursor()
 mydir = os.getcwd()
 hostname = socket.gethostname()

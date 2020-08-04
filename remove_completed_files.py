@@ -2,11 +2,13 @@ import sqlite3
 import getpass
 import sys,os
 
+from common import DATABASE_PATH
+
 if getpass.getuser() not in ('kstovall', 'pulsar'):
   print("Must be run by 'kstovall' or 'pulsar'")
   sys.exit(1)
   
-conn = sqlite3.connect('/home/pulsar/PulsarProcessing/PulsarProcessing.db')
+conn = sqlite3.connect(os.path.join(DATABASE_PATH, 'PulsarProcessing.db'))
 c = conn.cursor()
 c.execute("SELECT filename1,filename2,object FROM processing WHERE status='copied'")
 rows = c.fetchall()
