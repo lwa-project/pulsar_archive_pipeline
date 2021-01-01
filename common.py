@@ -10,7 +10,7 @@ __all__ = ["DATA_PATH", "DATABASE_PATH", "TZPAR_PATH", "TEMPLATE_PATH", "SCRIPT_
 
 _BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
-DATA_PATH = "/data/network/recent_data/pulsar/LK009"
+DATA_PATH = "/data/network/recent_data/pulsar/LK011"
 
 DATABASE_PATH = os.path.join(_BASE_PATH, "database")
 TZPAR_PATH = os.path.join(_BASE_PATH, "tzpar")
