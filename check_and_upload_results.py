@@ -103,7 +103,7 @@ if __name__ == "__main__":
     shutil.rmtree(mjd,ignore_errors=True)
     os.chdir(processdirname)
     os.rmdir(pulsardirname)
-    conn = sqlite3.connect('/home/pulsar/PulsarProcessing/PulsarProcessing.db')
+    conn = sqlite3.connect('/home/pulsar/bin/database/PulsarProcessing.db')
     c = conn.cursor()
     hostname = socket.gethostname()
     print pulsarname, hostname, processdirname
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     print t1
     c.execute("UPDATE processing set status='copied' WHERE object=? AND node=? AND dir=?",t1)
     conn.commit()
-    if (checkpsr == 1):
+    if (int(checkpsr) == 1):
       cmd = "python /home/pulsar/bin/startpulsarprocess.py"
       p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #    out, err = p.communicate()

@@ -3,6 +3,7 @@ import os,socket
 
 from common import DATABASE_PATH
 
+print (DATABASE_PATH)
 conn = sqlite3.connect(os.path.join(DATABASE_PATH, 'PulsarProcessing.db'))
 c = conn.cursor()
 mydir = os.getcwd()

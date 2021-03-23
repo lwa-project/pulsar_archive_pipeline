@@ -60,7 +60,7 @@ def printranges(freqlist):
 
 def main():
     if len(sys.argv) < 1:
-        print "Usage: sys.argv[0] filename"
+        print("Usage: sys.argv[0] filename")
         sys.exit()
     infile = sys.argv[1]
     ranges= ["50.03:50.07", "87.4:88.0"]
@@ -73,6 +73,7 @@ def main():
     except AttributeError:
         # Python2 catch
         pass
+    print (out)
     nchan = int(out.strip('\n'))
     cmd = "readfile %s | grep Central | awk '{print $5}'" % infile
     p = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)

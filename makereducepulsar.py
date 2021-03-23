@@ -94,8 +94,7 @@ for drxfile in drxfiles:
     
     # Save it
     drxbeams.append(beam)
-    drxfreqs.append([centralFreq1,centralFreq2])
-    
+    drxfreqs.append([round(centralFreq1,1),round(centralFreq2,1)])
     idf.close()
     
 intermediates = ".INTERMEDIATE:"
@@ -330,7 +329,7 @@ else:
     fitsstamp = fitsstamp + "\n"
     fitsstamp = fitsstamp + "\t@rm -f fits.temp\n"
     fitsstamp = fitsstamp + "\t@touch fits.temp\n"
-    fitsstamp = fitsstamp + "\t-/usr/local/extensions/Pulsar/writePsrfits2D.py --source=%s --ra=%s --dec=%s --nchan=%s --nsblk=%s %s $^ > write_psrfits.out\n" % (psrname,ra,dec,writepsrnchan,writepsrnsblk,dm)
+    fitsstamp = fitsstamp + "\t-/usr/local/extensions/Pulsar/writePsrfits2D.py --source=%s --ra=%s --dec=%s --nchan=%s --nsblk=%s %s $^ > writepsrfits.out\n" % (psrname,ra,dec,writepsrnchan,writepsrnsblk,dm)
     fitsstamp = fitsstamp + "\tpython /home/pulsar/bin/check_writepsrfits_result.py writepsrfits.out\n"
     fitsstamp = fitsstamp + "\t@mv -f fits.temp $@\n\n"
     for i,beam in enumerate(drxbeams):
@@ -482,7 +481,10 @@ fits = fits + "\n"
 print(".DEFAULT_GOAL := all\n")
 print(intermediates)
 if searchsinglepulse == "1" or searchscatteredpulse == "1":
-    print("all: fits masks weights pfds subs dats ar singlepulse\n")
+    if psrname == "J1005+3015":
+        print("all: fits masks weights subs dats singlepulse\n")
+    else:
+        print("all: fits masks weights pfds subs dats ar singlepulse\n")
 else:
     print("all: fits masks weights pfds subs dats ar\n")
 print(make)

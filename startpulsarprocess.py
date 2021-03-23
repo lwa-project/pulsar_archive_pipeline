@@ -29,8 +29,9 @@ if len(result) != 0:
 with open(os.path.join(DATABASE_PATH, 'PulsarProcessing.skip'), 'r') as skipf:
     skippulsars = skipf.read().splitlines()
     
-if hostname not in ("lwaucf5", "lwaucf6"):
+if hostname not in ("lwaucf1", "lwaucf2","lwaucf3"):
     skippulsars.append("J0034-0534")
+    skippulsars.append("J0459-0210")
     
 skipfiles = []
 for pending in glob.glob(os.path.join(RDQ_PATH, '*')):
@@ -52,7 +53,7 @@ pulsardirs = glob.glob(os.path.join(DATA_PATH, "[BJ]*"))
 for pulsardir in pulsardirs:
     pulsarname = os.path.basename(pulsardir)
     if pulsarname in skippulsars:
-        print "Skipping %s" % pulsarname
+        print("Skipping %s" % pulsarname)
         continue
         
     filenames = glob.glob(os.path.join(pulsardir, "05*"))
@@ -120,15 +121,21 @@ for pulsardir in pulsardirs:
                         cmd = "%s %s 0 %s" % (os.path.join(SCRIPT_PATH, "makereducepulsar.py"), pulsarname, filename)
                     else:
                         cmd = "%s %s 0 %s" % (os.path.join(SCRIPT_PATH, "makereducepulsar.py"), pulsarname, os.path.join(pulsardir, partnerfile))
-                    with open("Make.psr","w") as outfile:
+	            makefilename = "Make_%s.psr" % pulsarname	
+                    with open(makefilename,"w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
                         p.communicate()
                         
                     cmd = "touch singlebeam"
                     p = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
                     p.communicate()
-                    
-                    cmd = "make -j6 -l10 -f Make.psr"
+                    print(hostname)
+		    if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2":
+                        cmd = "(time make -j6 -l14 -f %s)" % makefilename 
+                        print(cmd)
+                    else:
+                        cmd = "(time make -j3 -l7 -f %s)" % makefilename
+                        print(cmd)
                     with open("reducepulsar.out", "w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
                         p.communicate()
@@ -163,8 +170,13 @@ for pulsardir in pulsardirs:
                     with open(makefilename, "w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
                         p.communicate()
-                        
-                    cmd = "make -j6 -l10 -f %s" % makefilename
+                    print(hostname)
+		    if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2":    
+                    	cmd = "(time make -j6 -l14 -f %s)" % makefilename
+			print(cmd)
+		    else:
+			cmd = "(time make -j3 -l7 -f %s)" % makefilename
+			print(cmd)
                     with open("reducepulsar.out", "w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
                         p.communicate()
