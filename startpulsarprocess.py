@@ -98,9 +98,22 @@ for pulsardir in pulsardirs:
                     result = c.fetchall()
                     c.execute("SELECT object,node,dir FROM processing WHERE filename1=? AND filename2=?",t1)
                     result = c.fetchall()
+		    # identify files added for deletion
+		    scheduled_files=[]
+		    rdq_files=glob.glob(RDQ_PATH +"pulsar-*")
+		    if len(rdq_files) !=0:
+		    	for ii in rdq_files:
+		    		data_file=open(ii)
+				reader=data_file.readline()
+				scheduled_files.append(reader.split()[1])
+				data_file.close()
+			
                     if len(result) != 0:
-                        print("Current source (%s) is being processed on %s:%s" % (result[0][0],result[0][1],result[0][2]))
+                    	print("Current source (%s) is being processed on %s:%s" % (result[0][0],result[0][1],result[0][2]))
                         continue
+		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
+			print("Current source (%s) is being scheduled for Deletion" % result[0][0])
+			continue
                     else:
                         print(result)
                         
@@ -152,8 +165,21 @@ for pulsardir in pulsardirs:
                     result = c.fetchall()
                     c.execute("SELECT object,node,dir FROM processing WHERE filename1=? AND filename2=?",t1)
                     result = c.fetchall()
-                    if len(result) != 0:
+                    # identify files added for deletion
+                    scheduled_files=[]
+                    rdq_files=glob.glob(RDQ_PATH +"pulsar-*")
+                    if len(rdq_files) !=0:
+                        for ii in rdq_files:
+                                data_file=open(ii)
+                                reader=data_file.readline()
+                                scheduled_files.append(reader.split()[1])
+                                data_file.close()
+                    
+		    if len(result) != 0:
                         print("Current source (%s) is being processed on %s:%s" % (result[0][0], result[0][1], result[0][2]))
+                        continue
+		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
+                        print("Current source (%s) is being scheduled for Deletion" % result[0][0])
                         continue
                     print(result)
                     print("Starting new process: %s %s %s" % (pulsarname, basefilename, partnerfile))
