@@ -27,9 +27,9 @@ if len(rows) != 0:
 	for row in rows:
 		pulsardir = os.path.dirname(row[0])
 		print("Removing %s" % row[0])
-		os.system("rmrd -f %s" % row[0])
+		os.system("/usr/local/bin/rmrd -f %s" % row[0])
 		print("Removing %s" % row[1])
-		os.system("rmrd -f %s" % row[1])
+		os.system("/usr/local/bin/rmrd -f %s" % row[1])
 		t1 = (row[0],row[1])
 		c.execute("UPDATE processing SET status='scheduled' WHERE filename1=? AND filename2=?",t1)
 		conn.commit()
