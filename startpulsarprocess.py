@@ -114,6 +114,9 @@ for pulsardir in pulsardirs:
 		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
 			print("Current source (%s) is being scheduled for Deletion" % result[0][0])
 			continue
+		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[0], os.R_OK)==False):
+			print("Current source (%s) is being written" % result[0][0])
+		    	continue
                     else:
                         print(result)
                         
@@ -181,7 +184,11 @@ for pulsardir in pulsardirs:
 		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
                         print("Current source (%s) is being scheduled for Deletion" % result[0][0])
                         continue
-                    print(result)
+		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[0], os.R_OK)==False):
+                        print("Current source (%s) is being written" % result[0][0])
+			continue
+		    else:	
+                    	print(result)
                     print("Starting new process: %s %s %s" % (pulsarname, basefilename, partnerfile))
                     t1 = (pulsarname,filename,os.path.join(pulsardir,partnerfile),hostname,mydir,'processing')
                     c.execute("INSERT INTO processing (object,filename1,filename2,node,dir,status) VALUES (?,?,?,?,?,?)",t1)
