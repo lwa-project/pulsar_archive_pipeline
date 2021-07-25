@@ -147,10 +147,10 @@ for pulsardir in pulsardirs:
                     p.communicate()
                     print(hostname)
 		    if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2":
-                        cmd = "(time make -j6 -l14 -f %s)" % makefilename 
+                        cmd = "(time make -j6 -l14 -f %s &)" % makefilename 
                         print(cmd)
                     else:
-                        cmd = "(time make -j3 -l7 -f %s)" % makefilename
+                        cmd = "(time make -j3 -l7 -f %s &)" % makefilename
                         print(cmd)
                     with open("reducepulsar.out", "w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
@@ -205,10 +205,10 @@ for pulsardir in pulsardirs:
                         p.communicate()
                     print(hostname)
 		    if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2":    
-                    	cmd = "(time make -j6 -l14 -f %s)" % makefilename
+                    	cmd = "(time make -j6 -l14 -f %s &)" % makefilename
 			print(cmd)
 		    else:
-			cmd = "(time make -j3 -l7 -f %s)" % makefilename
+			cmd = "(time make -j3 -l7 -f %s &)" % makefilename
 			print(cmd)
                     with open("reducepulsar.out", "w") as outfile:
                         p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
