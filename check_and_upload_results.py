@@ -9,6 +9,7 @@ import sqlite3
 import socket
 
 from common import DATABASE_PATH
+import crontab
 
 checkpsr = sys.argv[1]
 
@@ -87,6 +88,15 @@ if __name__ == "__main__":
     pulsarname = os.path.basename(pulsardirname)
     processdirname = os.path.dirname(pulsardirname)
     os.chdir(pulsardirname)
+
+    #controls for removing the existing cronjob 
+    cron=crontab.CronTab(user='pulsar')
+    for job in cron:
+        if job.command.find(pulsarname)>0:
+            cron.remove(job)
+	    #job.delete()
+    cron.write()
+
     cmd = "rsync -rP %s lda10g.alliance.unm.edu:/FileStore/PulsarArchive/%s/" % (mjd,pulsarname)
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
@@ -115,4 +125,14 @@ if __name__ == "__main__":
       cmd = "python /home/pulsar/bin/startpulsarprocess.py"
       p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #    out, err = p.communicate()
+      # controls for adding cronjob for new pulsar process 
+      out=p.stdout.readlines()
+      for line in out:
+          if line.find("Starting")>=0:
+              new_pulsarname=line.split()[3]
+      cron=crontab.CronTab(user='pulsar')
+      new_job=cron.new(command='python /home/pulsar/psr_directory_size.py '+new_pulsarname+' '+processdirname)
+      new_job.minute.every(10)
+      new_job.enable()
+      cron.write()
       sys.exit(0)
