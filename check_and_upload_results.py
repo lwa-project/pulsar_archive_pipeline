@@ -130,9 +130,9 @@ if __name__ == "__main__":
       for line in out:
           if line.find("Starting")>=0:
               new_pulsarname=line.split()[3]
-      cron=crontab.CronTab(user='pulsar')
-      new_job=cron.new(command='python /home/pulsar/bin/psr_directory_size.py '+new_pulsarname+' '+processdirname)
-      new_job.minute.every(10)
-      new_job.enable()
-      cron.write()
+      	      cron=crontab.CronTab(user='pulsar')
+      	      new_job=cron.new(command='python /home/pulsar/bin/psr_directory_size.py '+new_pulsarname+' '+processdirname)
+              new_job.minute.every(10)
+              new_job.enable()
+      	      cron.write()
       sys.exit(0)
