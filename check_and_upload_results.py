@@ -97,7 +97,7 @@ if __name__ == "__main__":
 	    #job.delete()
     cron.write()
 
-    cmd = "rsync -rP %s lda10g.alliance.unm.edu:/FileStore/PulsarArchive/%s/" % (mjd,pulsarname)
+    cmd = "rsync --bwlimit=25000 -rP %s lda10g.alliance.unm.edu:/FileStore/PulsarArchive/%s/" % (mjd,pulsarname)
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode != 0:
