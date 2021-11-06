@@ -114,8 +114,8 @@ for pulsardir in pulsardirs:
 		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
 			print("Current source (%s) is being scheduled for Deletion" % result[0][0])
 			continue
-		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[0], os.R_OK)==False):
-			print("Current source (%s) is being written" % result[0][0])
+		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[1], os.R_OK)==False):
+			print("Current source (%s) is being written" % pulsarname)
 		    	continue
                     else:
                         print(result)
