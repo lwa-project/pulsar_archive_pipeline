@@ -2,7 +2,7 @@
 
 import subprocess,sys,socket,os
 from lsl.reader.ldp import DRXFile
-import psr_utils as pu
+#import psr_utils as pu
 import sqlite3
 import numpy as np
 
