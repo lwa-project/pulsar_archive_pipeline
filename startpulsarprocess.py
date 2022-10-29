@@ -182,39 +182,41 @@ for pulsardir in pulsardirs:
                         print("Current source (%s) is being processed on %s:%s" % (result[0][0], result[0][1], result[0][2]))
                         continue
 		    elif (t1[0] in rdq_files) or (t1[1] in rdq_files):
-                        print("Current source (%s) is being scheduled for Deletion" % result[0][0])
-                        continue
-		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[0], os.R_OK)==False):
-                        print("Current source (%s) is being written" % result[0][0])
-			continue
+                        if len(result)!=0:
+                            print("Current source (%s) is being scheduled for Deletion" % result[0][0])
+                            continue
+		    elif (os.access(t1[0], os.R_OK)==False) or (os.access(t1[1], os.R_OK)==False):
+			if len(result)!=0:
+                            print("Current source (%s) is being written" % result[0][0])
+			    continue
 		    else:	
                     	print(result)
-                    print("Starting new process: %s %s %s" % (pulsarname, basefilename, partnerfile))
-                    t1 = (pulsarname,filename,os.path.join(pulsardir,partnerfile),hostname,mydir,'processing')
-                    c.execute("INSERT INTO processing (object,filename1,filename2,node,dir,status) VALUES (?,?,?,?,?,?)",t1)
-                    conn.commit()
-                    os.mkdir(pulsarname)
-                    os.chdir(pulsarname)
-                    os.mkdir(str(int(mjd)))
-                    os.chdir(str(int(mjd)))
-                    
-                    cmd = "%s %s 1 %s %s" % (os.path.join(SCRIPT_PATH, "makereducepulsar.py"), pulsarname, filename, os.path.join(pulsardir, partnerfile))
-                    makefilename = "Make_%s.psr" % pulsarname
-                    with open(makefilename, "w") as outfile:
-                        p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
-                        p.communicate()
-                    print(hostname)
-		    if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2":    
-                    	cmd = "(time make -j6 -l14 -f %s &)" % makefilename
-			print(cmd)
-		    else:
-			cmd = "(time make -j3 -l7 -f %s &)" % makefilename
-			print(cmd)
-                    with open("reducepulsar.out", "w") as outfile:
-                        p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
-                        p.communicate()
-                        
-                    sys.exit(0)
+                    	print("Starting new process: %s %s %s" % (pulsarname, basefilename, partnerfile))
+                    	t1 = (pulsarname,filename,os.path.join(pulsardir,partnerfile),hostname,mydir,'processing')
+                    	c.execute("INSERT INTO processing (object,filename1,filename2,node,dir,status) VALUES (?,?,?,?,?,?)",t1)
+                    	conn.commit()
+                    	os.mkdir(pulsarname)
+                    	os.chdir(pulsarname)
+                    	os.mkdir(str(int(mjd)))
+                    	os.chdir(str(int(mjd)))
+                    	
+                    	cmd = "%s %s 1 %s %s" % (os.path.join(SCRIPT_PATH, "makereducepulsar.py"), pulsarname, filename, os.path.join(pulsardir, partnerfile))
+                    	makefilename = "Make_%s.psr" % pulsarname
+                    	with open(makefilename, "w") as outfile:
+                    	    p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
+                    	    p.communicate()
+                    	print(hostname)
+		    	if hostname=="lwaucf3" or hostname=="lwaucf1" or hostname=="lwaucf2" or hostname=="lwaucf6":    
+                    		cmd = "(time make -j6 -l14 -f %s &)" % makefilename
+		    	        print(cmd)
+		    	else:
+		    	    cmd = "(time make -j3 -l7 -f %s &)" % makefilename
+		    	    print(cmd)
+                    	with open("reducepulsar.out", "w") as outfile:
+                    	    p = subprocess.Popen(cmd, shell=True, stdout=outfile, stderr=subprocess.STDOUT)
+                    	    p.communicate()
+                    	    
+                    	sys.exit(0)
                     
 print("Reached the end of file list, none met criteria")
 conn.close()
