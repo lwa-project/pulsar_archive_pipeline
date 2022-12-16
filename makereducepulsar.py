@@ -359,7 +359,7 @@ rfirules = rfirules + "\tpython %s/create_ignore_chan.py $< > $*.ignorechan\n\n"
 rfirules = rfirules + "%_rfifind.mask: %_0001.fits %.ignorechan\n"
 rfirules = rfirules + "\trfifind -time 30 -o $* $< -ignorechan $*.ignorechan > $*_rfifind.out\n\n"
 rfirules = rfirules + "%_rfifind.weights: %_rfifind.mask\n"
-rfirules = rfirules + "\t-python2.7 /home/pulsar/bin/rfifind.py $^\n\n"
+rfirules = rfirules + "\t-python3 /usr/local/presto/python/presto/rfifind.py $^\n\n"
 
 pfdrules = pfdrules + "%%_timing_masked_PSR_%s.pfd: %%_0001.fits %%_rfifind.mask %%.ignorechan\n" % (parpsrname)
 pfdrules = pfdrules + "\tprepfold -ncpus 2 -mask $*_rfifind.mask -timing %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_timing_masked -dm %s $< > $*_timing_masked.out; if [ $$? -ne 0 ] ; then \\\n" % (TZPAR_PATH,psrname,ntbin,nprepsub,dm)
