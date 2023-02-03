@@ -4,7 +4,7 @@ import matplotlib
 #matplotlib.use("macosx")
 import matplotlib.pyplot as plt
 import sys
-import infodata
+from presto.infodata import infodata
 import math
 
 #numpoints=524288

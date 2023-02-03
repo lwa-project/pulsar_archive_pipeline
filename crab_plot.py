@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-import bisect, os, sys, getopt, infodata, glob
-import scipy, scipy.signal, ppgplot
+import bisect, os, sys, getopt, glob
+from presto.infodata import infodata
+import scipy, scipy.signal
+from presto import ppgplot
 import numpy as Num
-from presto import rfft
-from psr_utils import coord_to_string
+from presto.presto import rfft
+from presto.psr_utils import coord_to_string
 from optparse import OptionParser
-from Pgplot import *
+from presto.Pgplot import *
 
 class candidate:
     def __init__(self, DM, sigma, time, bin, downfact,beta):
@@ -227,7 +229,7 @@ def main():
     (opts, args) = parser.parse_args()
     if len(args)==0:
         if opts.globexp==None:
-            print full_usage
+            print(full_usage)
             sys.exit(0)
         else:
             args = []
@@ -303,14 +305,14 @@ def main():
             roundN = N/detrendlen * detrendlen
             numchunks = roundN / chunklen
             # Read in the file
-            print 'Reading "%s"...'%filenm
+            print('Reading "%s"...'%filenm)
             timeseries = Num.fromfile(filenm, dtype=Num.float32, count=roundN)
             # Split the timeseries into chunks for detrending
             numblocks = roundN/detrendlen
             timeseries.shape = (numblocks, detrendlen)
             stds = Num.zeros(numblocks, dtype=Num.float64)
             # de-trend the data one chunk at a time
-            print '  De-trending the data and computing statistics...'
+            print('  De-trending the data and computing statistics...')
             for ii, chunk in enumerate(timeseries):
                 if opts.fast:  # use median removal instead of detrending (2x speedup)
                     tmpchunk = chunk.copy()
@@ -348,12 +350,12 @@ def main():
             hi_std = median_stds + 4.0 * std_stds
             # Determine a list of "bad" chunks.  We will not search these.
             bad_blocks = Num.nonzero((stds < lo_std) | (stds > hi_std))[0]
-            print "    pseudo-median block standard deviation = %.2f" % (median_stds)
-            print "    identified %d bad blocks out of %d (i.e. %.2f%%)" % \
+            print("    pseudo-median block standard deviation = %.2f" % (median_stds))
+            print("    identified %d bad blocks out of %d (i.e. %.2f%%)" % \
                   (len(bad_blocks), len(stds),
-                   100.0*float(len(bad_blocks))/float(len(stds)))
+                   100.0*float(len(bad_blocks))/float(len(stds))))
             stds[bad_blocks] = median_stds
-            print "  Now searching..."
+            print("  Now searching...")
 
             # Now normalize all of the data and reshape it to 1-D
             timeseries /= stds[:,Num.newaxis]
@@ -448,7 +450,7 @@ def main():
             # are within the downsample proximity of a higher
             # signal-to-noise pulse
             dm_candlist = prune_related2(dm_candlist, downfacts)
-            print "  Found %d pulse candidates"%len(dm_candlist)
+            print("  Found %d pulse candidates"%len(dm_candlist))
             
             # Get rid of those near padding regions
             if info.breaks: prune_border_cases(dm_candlist, offregions)
@@ -526,7 +528,7 @@ def main():
         ppgplot.pgswin(min(DMs)-0.5, max(DMs)+0.5, 0.0, 1.1*max(num_v_DM+[1]))
         ppgplot.pgsch(0.8)
         ppgplot.pgbox("BCNST", 0, 0, "BCNST", 0, 0)
-        ppgplot.pgmtxt('B', 2.5, 0.5, 0.5, "DM (pc cm\u-3\d)")
+        ppgplot.pgmtxt('B', 2.5, 0.5, 0.5, r"DM (pc cm\\u-3\\d)")
         ppgplot.pgmtxt('L', 1.8, 0.5, 0.5, "Number of Pulses")
         ppgplot.pgsch(1.0)
         ppgplot.pgbin(DMs, num_v_DM, 1)
@@ -536,7 +538,7 @@ def main():
         ppgplot.pgswin(min(DMs)-0.5, max(DMs)+0.5, opts.threshold, maxsnr)
         ppgplot.pgsch(0.8)
         ppgplot.pgbox("BCNST", 0, 0, "BCNST", 0, 0)
-        ppgplot.pgmtxt('B', 2.5, 0.5, 0.5, "DM (pc cm\u-3\d)")
+        ppgplot.pgmtxt('B', 2.5, 0.5, 0.5, r"DM (pc cm\u-3\d)")
         ppgplot.pgmtxt('L', 1.8, 0.5, 0.5, "Signal-to-Noise")
         ppgplot.pgsch(1.0)
         cand_ts = Num.zeros(len(candlist), dtype=Num.float32)
@@ -553,7 +555,7 @@ def main():
         ppgplot.pgsch(0.8)
         ppgplot.pgbox("BCNST", 0, 0, "BCNST", 0, 0)
         ppgplot.pgmtxt('B', 2.5, 0.5, 0.5, "Time (s)")
-        ppgplot.pgmtxt('L', 1.8, 0.5, 0.5, "DM (pc cm\u-3\d)")
+        ppgplot.pgmtxt('L', 1.8, 0.5, 0.5, r"DM (pc cm\u-3\d)")
         # Circles are symbols 20-26 in increasing order
         snr_range = 12.0
         cand_symbols = (cand_SNRs-opts.threshold)/snr_range * 6.0 + 20.5
@@ -589,10 +591,10 @@ def main():
             instrument = info.instrument
         ppgplot.pgmtxt('T', -3.7, 0.02, 0.0, 'Instrument: %s'%instrument)
         if (info.bary):
-            ppgplot.pgmtxt('T', -3.7, 0.33, 0.0, 'MJD\dbary\u: %.12f'%info.epoch)
+            ppgplot.pgmtxt('T', -3.7, 0.33, 0.0, r'MJD\dbary\u: %.12f'%info.epoch)
         else:
-            ppgplot.pgmtxt('T', -3.7, 0.33, 0.0, 'MJD\dtopo\u: %.12f'%info.epoch)
-        ppgplot.pgmtxt('T', -3.7, 0.73, 0.0, 'Freq\dctr\u: %.1f MHz'%\
+            ppgplot.pgmtxt('T', -3.7, 0.33, 0.0, r'MJD\dtopo\u: %.12f'%info.epoch)
+        ppgplot.pgmtxt('T', -3.7, 0.73, 0.0, r'Freq\dctr\u: %.1f MHz'%\
                        ((info.numchan/2-0.5)*info.chan_width+info.lofreq))
         ppgplot.pgiden()
         ppgplot.pgend()
