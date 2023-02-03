@@ -104,7 +104,7 @@ for i in [40.0,80.0,120.0,200.0,400.0,800.0,1600.0,3200.0]:
 filenm=sys.argv[1]
 filenmbase = filenm[:filenm.rfind(".dat")]
 signal = np.fromfile(filenm, dtype=np.float32, count=numpoints)
-info = infodata.infodata(filenmbase+".inf")
+info = infodata(filenmbase+".inf")
 DMs = []
 DMstr = "%.4f"%info.DM
 DMs.append(info.DM)

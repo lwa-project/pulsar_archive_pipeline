@@ -186,7 +186,7 @@ def read_singlepulse_files(infiles, threshold, T_start, T_end):
             filenmbase = infile[:infile.rfind(".scatteredsearch")]
         else:
             filenmbase = infile
-        info = infodata.infodata(filenmbase+".inf")
+        info = infodata(filenmbase+".inf")
         DMstr = "%.2f"%info.DM
         DMs.append(info.DM)
         num_v_DMstr[DMstr] = 0
@@ -277,7 +277,7 @@ def main():
                 filenmbase = filenm[:filenm.rfind(".dat")]
             else:
                 filenmbase = filenm
-            info = infodata.infodata(filenmbase+".inf")
+            info = infodata(filenmbase+".inf")
             DMstr = "%.2f"%info.DM
             DMs.append(info.DM)
             N, dt = int(info.N), info.dt
