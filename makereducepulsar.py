@@ -402,9 +402,9 @@ pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorec
 pfdrules = pfdrules + "\tprepfold -ncpus 2 -par %s/%s.par -ignorechan $*.ignorechan -n %s -nsub %d -noxwin -o $*_search_unmasked -dm %s $< > $*_search_unmasked.out; fi ; fi ; fi ; fi ; fi ; fi ; fi\n\n" % (TZPAR_PATH,psrname,nsbin,nprepsub*26,dm)
 
 subrules = subrules + "%_subs_0001.fits: %_0001.fits %_rfifind.weights\n"
-subrules = subrules + "\tpsrfits_subband -weights $*_rfifind.weights -o $*_subs -nsub %s -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] ; then \\\n" % (nprepsub,dm,dstime)
-subrules = subrules + "\tpsrfits_subband -o $*_subs -nsub %s -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] ; then \\\n" % (nprepsub,dm,dstime)
-subrules = subrules + "\tpsrfits_subband -weights $*_rfifind.weights -o $*_subs -nsub %d -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] ; then \\\n" % (nprepsub*2,dm,dstime)
+subrules = subrules + "\tpsrfits_subband -weights $*_rfifind.weights -o $*_subs -nsub %s -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] || [ `echo $(test -e $*_subs*.fits) $$?` -ne 0 ] ; then \\\n" % (nprepsub,dm,dstime)
+subrules = subrules + "\tpsrfits_subband -o $*_subs -nsub %s -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] || [ `echo $(test -e $*_subs*.fits) $$?` -ne 0 ] ; then \\\n" % (nprepsub,dm,dstime)
+subrules = subrules + "\tpsrfits_subband -weights $*_rfifind.weights -o $*_subs -nsub %d -dm %s -dstime %s $* > $*_subs.out; if [ $$? -ne 0 ] || [ `echo $(test -e $*_subs*.fits) $$?` -ne 0 ] ; then \\\n" % (nprepsub*2,dm,dstime)
 subrules = subrules + "\tpsrfits_subband -o $*_subs -nsub %d -dm %s -dstime %s $* > $*_subs.out; fi ; fi ; fi\n\n" % (nprepsub*2,dm,dstime)
 
 datrules = datrules + "%%_DM%s_topo_masked.dat: %%_0001.fits %%_rfifind.mask %%_DM%s_topo_unmasked.dat %%.ignorechan\n" % (dm,dm)
@@ -420,7 +420,7 @@ if searchsinglepulse == "1":
     enddm=float(dm)+0.50
     dmstep=0.1
     sprules = sprules + "%_singlepulse.ps: %_singlepulse\n"
-    sprules = sprules + "\t%s/single_pulse_search.py -t 5.5 $*_singlepulse/*.singlepulse\n" % SCRIPT_PATH
+    sprules = sprules + "\tpython3 %s/single_pulse_search.py -t 5.5 $*_singlepulse/*.singlepulse\n" % SCRIPT_PATH
     sprules = sprules + "\t mv $*_singlepulse/$@ .\n\n"
     sprules = sprules + "%_singlepulse.tgz: %_singlepulse %_singlepulse.ps\n"
     sprules = sprules + "\ttar -czf $@ $<\n"
@@ -440,7 +440,7 @@ if searchsinglepulse == "1":
         sprules = sprules + "\tpython %s/get_mask_percentage.py $*_rfifind.mask ; if [ $$? -ne 0 ] ; then \\\n" % SCRIPT_PATH
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits ; else \\\n" % (trialdm,trialdm)
         sprules = sprules + "\tprepsubband -lodm %0.3f -numdms 100 -dmstep 0.001 -dmprec 3 -ignorechan $*.ignorechan -nsub 256 -o $*_DM%0.3f_singlepulse/$* $*_0001.fits -mask $*_rfifind.mask ; fi\n" % (trialdm,trialdm)
-        sprules = sprules + "\t%s/single_pulse_search.py -m 1 -b -p -g $*_DM%0.3f_singlepulse/*.dat\n" % (SCRIPT_PATH, trialdm)
+        sprules = sprules + "\tpython3 %s/single_pulse_search.py -m 1 -b -p -g $*_DM%0.3f_singlepulse/*.dat\n" % (SCRIPT_PATH, trialdm)
         sprules = sprules + "\trm $*_DM%0.3f_singlepulse/*.dat\n\n" % trialdm
 if searchscatteredpulse == "1":
     startdm=float(dm)-5.00
