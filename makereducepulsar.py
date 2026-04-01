@@ -479,6 +479,7 @@ weights = weights + "\n"
 singlepulse = singlepulse + "\n"
 fits = fits + "\n"
 print(".DEFAULT_GOAL := all\n")
+print("export LSL_TELEMETRY_TAG = "pulsar_pipeline"\n")
 print(intermediates)
 if searchsinglepulse == "1" or searchscatteredpulse == "1":
     if psrname == "J1005+3015":
